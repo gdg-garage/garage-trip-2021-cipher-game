@@ -4,6 +4,7 @@
 using namespace cage;
 
 void cipherSudocube();
+void cipherDna();
 
 int main(int argc, const char *args[])
 {
@@ -17,6 +18,7 @@ int main(int argc, const char *args[])
 		configSetUint64("cage/random/seed2", 4522334992954367309);
 
 		cipherSudocube();
+		cipherDna();
 
 		return 0;
 	}
