@@ -1,8 +1,8 @@
 #include <cage-core/logger.h>
-#include <cage-core/config.h>
 
 using namespace cage;
 
+void cipherLabyrinth();
 void cipherSudocube();
 void cipherDna();
 
@@ -14,11 +14,9 @@ int main(int argc, const char *args[])
 
 	try
 	{
-		configSetUint64("cage/random/seed1", 9608723347976139271);
-		configSetUint64("cage/random/seed2", 4522334992954367309);
-
 		cipherSudocube();
 		cipherDna();
+		cipherLabyrinth();
 
 		return 0;
 	}

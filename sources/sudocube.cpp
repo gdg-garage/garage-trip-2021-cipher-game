@@ -1,12 +1,11 @@
+#include "common.h"
+
 #include <cage-core/flatSet.h>
 #include <cage-core/enumerate.h>
 #include <cage-core/files.h>
 #include <cage-core/math.h>
 
 #include <vector>
-#include <string>
-
-using namespace cage;
 
 namespace
 {
@@ -203,6 +202,9 @@ namespace
 
 void cipherSudocube()
 {
+	constexpr uint32 cypherIndex = 2;
+
+	rngReseed();
 	std::vector<uint8> data;
 	while (true)
 	{
@@ -217,19 +219,23 @@ void cipherSudocube()
 	CAGE_ASSERT(findEmpty(question) != m);
 	CAGE_ASSERT(isValid(question));
 
-	Holder<File> f = writeFile("output/sudocube.html");
-	std::string s = R"foo(<html><head><style>
+	const std::string style = R"foo(<style>
 table { border-collapse: collapse; }
 td { margin: 0px; padding: 0px; }
 .side td { border: 1px solid gray; text-align: center; width: 2em; height: 2em; }
 td.cross { border: 1px solid black; }
-</style></head><body>
-)foo" + printCross(question) + R"foo(
-puzzle
-<hr style="page-break-before: always">
-solution
-)foo" + printCross(data) + R"foo(
-</body></html>)foo";
-	f->write({ s.data(), s.data() + s.size() });
-	f->close();
+</style>
+)foo";
+
+	{
+		const std::string o = generateHeader(cypherIndex, "Kostka") + style + printCross(question) + generateFooter(cypherIndex);
+		writeOutput(cypherIndex, o);
+	}
+
+	{
+		Holder<File> f = writeFile(pathJoin(solutionPath, "sudocube.html"));
+		const std::string o = std::string() + "<html><head><style>*{font-size:14pt; font-family:monospace;}</style></head><body>" + style + printCross(data) + "</body></html>";
+		f->write(o);
+		f->close();
+	}
 }

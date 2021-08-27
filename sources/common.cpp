@@ -1,10 +1,16 @@
 #include "common.h"
 
-#include "cage-core/files.h"
-#include "cage-core/debug.h"
+#include <cage-core/random.h>
+#include <cage-core/files.h>
+#include <cage-core/debug.h>
 
 namespace
 {
+	string findDataPath()
+	{
+		return pathToAbs(pathSearchTowardsRoot("data", PathTypeFlags::Directory));
+	}
+
 	string findInputPath()
 	{
 		return pathToAbs(pathSearchTowardsRoot("inputs", PathTypeFlags::Directory));
@@ -22,10 +28,25 @@ namespace
 			return pathJoin(findInputPath(), "../outputs");
 		}
 	}
+
+	string findSolutionPath()
+	{
+		try
+		{
+			detail::OverrideBreakpoint ob;
+			return pathToAbs(pathSearchTowardsRoot("solutions", PathTypeFlags::Directory));
+		}
+		catch (...)
+		{
+			return pathJoin(findInputPath(), "../solutions");
+		}
+	}
 }
 
+const string dataPath = findDataPath();
 const string inputPath = findInputPath();
 const string outputPath = findOutputPath();
+const string solutionPath = findSolutionPath();
 
 std::string readInputFile(const string &filename)
 {
@@ -183,3 +204,7 @@ std::string toLower(const std::string &s)
 	return o;
 }
 
+void rngReseed()
+{
+	detail::globalRandomGenerator() = RandomGenerator(9608723347976139271, 4522334992954367309);
+}

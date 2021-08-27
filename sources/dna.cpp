@@ -99,7 +99,8 @@ namespace
 
 void cipherDna()
 {
-	constexpr uint32 cypherIndex = 2;
+	constexpr uint32 cypherIndex = 3;
+	rngReseed();
 	std::string i = readInput(cypherIndex);
 	i = replaceLfToSpaces(i);
 	i = replaceCzech(i);
