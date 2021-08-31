@@ -14,9 +14,9 @@ int main(int argc, const char *args[])
 
 	try
 	{
+		cipherLabyrinth();
 		cipherSudocube();
 		cipherDna();
-		cipherLabyrinth();
 
 		return 0;
 	}
