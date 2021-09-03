@@ -2,6 +2,7 @@
 
 using namespace cage;
 
+void makeTitle();
 void cipherLabyrinth();
 void cipherSudocube();
 void cipherDna();
@@ -14,6 +15,7 @@ int main(int argc, const char *args[])
 
 	try
 	{
+		makeTitle();
 		cipherLabyrinth();
 		cipherSudocube();
 		cipherDna();

@@ -8,11 +8,6 @@ namespace
 {
 	string findDataPath()
 	{
-		return pathToAbs(pathSearchTowardsRoot("data", PathTypeFlags::Directory));
-	}
-
-	string findInputPath()
-	{
 		return pathToAbs(pathSearchTowardsRoot("inputs", PathTypeFlags::Directory));
 	}
 
@@ -25,7 +20,7 @@ namespace
 		}
 		catch (...)
 		{
-			return pathJoin(findInputPath(), "../outputs");
+			return pathJoin(findDataPath(), "../outputs");
 		}
 	}
 
@@ -38,27 +33,14 @@ namespace
 		}
 		catch (...)
 		{
-			return pathJoin(findInputPath(), "../solutions");
+			return pathJoin(findDataPath(), "../solutions");
 		}
 	}
 }
 
-const string dataPath = findDataPath();
-const string inputPath = findInputPath();
+const string inputPath = findDataPath();
 const string outputPath = findOutputPath();
 const string solutionPath = findSolutionPath();
-
-std::string readInputFile(const string &filename)
-{
-	auto b = readFile(pathJoin(inputPath, filename))->readAll();
-	std::string s = std::string(b.data(), b.size());
-	return s;
-}
-
-std::string readInput(uint32 index)
-{
-	return readInputFile(stringizer() + index + ".txt");
-}
 
 std::string generateHeader(uint32 index, const string &name)
 {
@@ -85,22 +67,11 @@ TITLE (DOCID)
 
 	replace(s, "TITLE", name.c_str());
 	replace(s, "DOCID", string(stringizer() + index).c_str());
-
-	{
-		const string n = stringizer() + index + "-preface.txt";
-		if (pathIsFile(pathJoin(inputPath, n)))
-		{
-			std::string preface = readInputFile(n);
-			s += preface + "<hr>\n";
-		}
-		else
-			s += "<div style=\"clear: both\" />\n";
-	}
-
+	s += "<div style=\"clear: both\" />\n";
 	return s;
 }
 
-std::string generateFooter(uint32 index)
+std::string generateFooter()
 {
 	return R"foo(
 </body>
@@ -108,10 +79,16 @@ std::string generateFooter(uint32 index)
 )foo";
 }
 
-void writeOutput(uint32 index, const std::string &output)
+std::string readInput(const string &name)
 {
-	auto f = writeFile(pathJoin(outputPath, stringizer() + index + ".html"));
-	f->write(PointerRange<const char>(output.data(), output.data() + output.size()));
+	auto b = readFile(pathJoin(inputPath, name))->readAll();
+	return std::string(b.data(), b.size());
+}
+
+void writeOutput(const string &name, const std::string &output)
+{
+	auto f = writeFile(pathJoin(outputPath, stringizer() + name + ".html"));
+	f->write(output);
 	f->close();
 }
 

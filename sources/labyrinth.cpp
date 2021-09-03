@@ -418,10 +418,7 @@ namespace
 
 void cipherLabyrinth()
 {
-	constexpr uint32 cypherIndex = 1;
-
 	rngReseed();
-	//randomChance(); // offset rng
 	Labyrinth lab;
 	while (true)
 	{
@@ -444,14 +441,11 @@ void cipherLabyrinth()
 		r = replace(r, "G", Goal);
 		cipher += (r + "<br>").c_str();
 	}
-	//cipher = addLineBreaks(cipher);
-	//replace(cipher, " ", "&nbsp;");
-	//replace(plain, " ", "&nbsp;");
 	plain += string(stringizer() + "<hr>" + lab.path).c_str();
 
 	{
-		const std::string o = generateHeader(cypherIndex, "Ťapky") + cipher + generateFooter(cypherIndex);
-		writeOutput(cypherIndex, o);
+		const std::string o = generateHeader(1, "Ťapky") + cipher + generateFooter();
+		writeOutput("2", o);
 	}
 
 	{

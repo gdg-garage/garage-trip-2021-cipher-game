@@ -99,13 +99,12 @@ namespace
 
 void cipherDna()
 {
-	constexpr uint32 cypherIndex = 3;
 	rngReseed();
-	std::string i = readInput(cypherIndex);
+	std::string i = readInput("dna.txt");
 	i = replaceLfToSpaces(i);
 	i = replaceCzech(i);
 	i = toUpper(i);
 	std::string s = dnaEncode(i);
-	const std::string o = generateHeader(cypherIndex, "DNA") + s + generateFooter(cypherIndex);
-	writeOutput(cypherIndex, o);
+	const std::string o = generateHeader(3, "DNA") + s + generateFooter();
+	writeOutput("4", o);
 }

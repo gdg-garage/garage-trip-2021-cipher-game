@@ -237,8 +237,6 @@ namespace
 
 void cipherSudocube()
 {
-	constexpr uint32 cypherIndex = 2;
-
 	rngReseed();
 	std::vector<uint8> data;
 	while (true)
@@ -266,8 +264,8 @@ td.mark { background-color: lightgray; }
 )foo";
 
 	{
-		const std::string o = generateHeader(cypherIndex, "Kostka") + style + printCross(question, responseFields) + generateFooter(cypherIndex);
-		writeOutput(cypherIndex, o);
+		const std::string o = generateHeader(2, "Kostka") + style + printCross(question, responseFields) + generateFooter();
+		writeOutput("3", o);
 	}
 
 	{
