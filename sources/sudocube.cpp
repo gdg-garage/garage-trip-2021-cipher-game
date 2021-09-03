@@ -64,7 +64,7 @@ namespace
 		return true;
 	}
 
-	std::string printCrossSide(const std::vector<uint8> &data, uint32 index)
+	std::string printCrossSide(const std::vector<uint8> &data, uint32 index, const FlatSet<uint8> &responseFields)
 	{
 		std::string res = "<table class=\"side\">";
 		for (uint32 r = 0; r < 4; r++)
@@ -72,44 +72,48 @@ namespace
 			res += "<tr>";
 			for (uint32 c = 0; c < 4; c++)
 			{
-				const uint8 t = data[index + r * 4 + c];
+				const uint32 idx = index + r * 4 + c;
+				const uint8 t = data[idx];
 				const string s = t ? stringizer() + t : stringizer();
-				res += std::string() + "<td>" + s.c_str() + "</td>";
+				if (responseFields.count(idx))
+					res += std::string() + "<td class=\"mark\">" + s.c_str() + "</td>";
+				else
+					res += std::string() + "<td>" + s.c_str() + "</td>";
 			}
 			res += "</tr>";
 		}
 		return res + "</table>";
 	}
 
-	std::string printCross(const std::vector<uint8> &data)
+	std::string printCross(const std::vector<uint8> &data, const FlatSet<uint8> &responseFields)
 	{
 		CAGE_ASSERT(data.size() == 96);
 		std::string res = "<table>";
 		{
 			res += "<tr>";
 			res += "<td class=\"empty\" />";
-			res += "<td class=\"cross\">" + printCrossSide(data, 0) + "</td>";
+			res += "<td class=\"cross\">" + printCrossSide(data, 0, responseFields) + "</td>";
 			res += "<td class=\"empty\"  />";
 			res += "</tr>";
 		}
 		{
 			res += "<tr>";
-			res += "<td class=\"cross\">" + printCrossSide(data, 16) + "</td>";
-			res += "<td class=\"cross\">" + printCrossSide(data, 32) + "</td>";
-			res += "<td class=\"cross\">" + printCrossSide(data, 48) + "</td>";
+			res += "<td class=\"cross\">" + printCrossSide(data, 16, responseFields) + "</td>";
+			res += "<td class=\"cross\">" + printCrossSide(data, 32, responseFields) + "</td>";
+			res += "<td class=\"cross\">" + printCrossSide(data, 48, responseFields) + "</td>";
 			res += "</tr>";
 		}
 		{
 			res += "<tr>";
 			res += "<td class=\"empty\"  />";
-			res += "<td class=\"cross\">" + printCrossSide(data, 64) + "</td>";
+			res += "<td class=\"cross\">" + printCrossSide(data, 64, responseFields) + "</td>";
 			res += "<td class=\"empty\"  />";
 			res += "</tr>";
 		}
 		{
 			res += "<tr>";
 			res += "<td class=\"empty\"  />";
-			res += "<td class=\"cross\">" + printCrossSide(data, 80) + "</td>";
+			res += "<td class=\"cross\">" + printCrossSide(data, 80, responseFields) + "</td>";
 			res += "<td class=\"empty\"  />";
 			res += "</tr>";
 		}
@@ -182,7 +186,7 @@ namespace
 	std::vector<uint8> makeBlanks(const std::vector<uint8> &data)
 	{
 		std::vector<uint8> q = data;
-		for (uint32 round = 0; round < 30; round++) // make 30 tiles blank
+		for (uint32 round = 0; round < 35; round++) // make 35 tiles blank
 		{
 			while (true) // find a suitable tile for blanking
 			{
@@ -197,6 +201,37 @@ namespace
 			}
 		}
 		return q;
+	}
+
+	uint32 sumFields(const std::vector<uint8> &data, const FlatSet<uint8> &responseFields)
+	{
+		uint32 sum = 0;
+		for (auto i : responseFields)
+			sum += data[i];
+		return sum;
+	}
+
+	FlatSet<uint8> findResponseFields(const std::vector<uint8> &data, const std::vector<uint8> &question)
+	{
+		FlatSet<uint8> posibilities;
+		for (const auto &it : enumerate(question))
+			if (*it == 0)
+				posibilities.insert(it.index);
+
+		while (true)
+		{
+			FlatSet<uint8> pos = posibilities;
+			FlatSet<uint8> r;
+			while (!pos.empty())
+			{
+				const uint32 i = randomRange(uint32(0), uint32(pos.size()));
+				const uint32 v = *(pos.begin() + i);
+				pos.erase(pos.begin() + i);
+				r.insert(v);
+				if (r.size() > 7 && isPrime(sumFields(data, r)))
+					return r;
+			}
+		}
 	}
 }
 
@@ -219,22 +254,26 @@ void cipherSudocube()
 	CAGE_ASSERT(findEmpty(question) != m);
 	CAGE_ASSERT(isValid(question));
 
+	const FlatSet<uint8> responseFields = findResponseFields(data, question);
+
 	const std::string style = R"foo(<style>
 table { border-collapse: collapse; }
 td { margin: 0px; padding: 0px; }
 .side td { border: 1px solid gray; text-align: center; width: 2em; height: 2em; }
 td.cross { border: 1px solid black; }
+td.mark { background-color: lightgray; }
 </style>
 )foo";
 
 	{
-		const std::string o = generateHeader(cypherIndex, "Kostka") + style + printCross(question) + generateFooter(cypherIndex);
+		const std::string o = generateHeader(cypherIndex, "Kostka") + style + printCross(question, responseFields) + generateFooter(cypherIndex);
 		writeOutput(cypherIndex, o);
 	}
 
 	{
 		Holder<File> f = writeFile(pathJoin(solutionPath, "sudocube.html"));
-		const std::string o = std::string() + "<html><head><style>*{font-size:14pt; font-family:monospace;}</style></head><body>" + style + printCross(data) + "</body></html>";
+		const std::string response = (stringizer() + sumFields(data, responseFields)).value.c_str();
+		const std::string o = std::string() + "<html><head><style>*{font-size:14pt; font-family:monospace;}</style></head><body>" + style + printCross(data, responseFields) + "<hr>" + response + "</body></html>";
 		f->write(o);
 		f->close();
 	}

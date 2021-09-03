@@ -414,25 +414,6 @@ namespace
 		const auto b = utf32to8(r);
 		return std::string(b.data(), b.size());
 	}
-
-	bool isPrime(uint32 n)
-	{
-		switch (n)
-		{
-		case 0:
-		case 1:
-			return false;
-		case 2:
-		case 3:
-			return true;
-		}
-		if (n % 2 == 0 || n % 3 == 0)
-			return false;
-		for (uint32 i = 5; i * i <= n; i += 6)
-			if ((n % i == 0) || (n % (i + 2) == 0))
-				return false;
-		return true;
-	}
 }
 
 void cipherLabyrinth()
@@ -469,7 +450,7 @@ void cipherLabyrinth()
 	plain += string(stringizer() + "<hr>" + lab.path).c_str();
 
 	{
-		const std::string o = generateHeader(cypherIndex, "Prvočíslo") + cipher + generateFooter(cypherIndex);
+		const std::string o = generateHeader(cypherIndex, "Ťapky") + cipher + generateFooter(cypherIndex);
 		writeOutput(cypherIndex, o);
 	}
 

@@ -208,3 +208,22 @@ void rngReseed()
 {
 	detail::globalRandomGenerator() = RandomGenerator(9608723347976139271, 4522334992954367309);
 }
+
+bool isPrime(uint32 n)
+{
+	switch (n)
+	{
+	case 0:
+	case 1:
+		return false;
+	case 2:
+	case 3:
+		return true;
+	}
+	if (n % 2 == 0 || n % 3 == 0)
+		return false;
+	for (uint32 i = 5; i * i <= n; i += 6)
+		if ((n % i == 0) || (n % (i + 2) == 0))
+			return false;
+	return true;
+}
