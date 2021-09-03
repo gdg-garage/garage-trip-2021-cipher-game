@@ -323,10 +323,16 @@ namespace
 		}
 	};
 
-	const std::string Start = u8"\U0001F415"; // dog
-	const std::string Goal = u8"\U0001F9B4"; // bone
+	std::string iconSize(const std::string &icon)
+	{
+		return std::string() + "<span style=\"margin:-2.5pt; font-size:70%\">" + icon + "</span>";
+	}
+
+	const std::string Start = iconSize(u8"\U0001F415"); // dog
+	const std::string Goal = iconSize(u8"\U0001F9B4"); // bone
 	const std::string Path = u8"\U0001F43E"; // paw prints
 	const std::string Empty = u8"\u00B7"; // middle dot
+	const std::string Space = u8"&nbsp;"; // indivisible space
 
 	string connectedWall(uint32 neighbors)
 	{
@@ -386,7 +392,7 @@ namespace
 				res += Empty.c_str();
 				break;
 			default:
-				res += " ";
+				res += "?";
 				break;
 			}
 		}
@@ -449,16 +455,17 @@ void cipherLabyrinth()
 	for (uint32 y = 1; y < lab.height - 1; y++)
 	{
 		const string s = convertToAscii(lab, y);
-		plain += (s + "<br>").c_str();
-		string r = trim(s);
+		plain += (replace(s, "?", "&nbsp;") + "<br>").c_str();
+		string r = trim(s, true, true, "?");
+		r = replace(r, "?", string(Space.c_str()));
 		r = replace(r, "+", Empty);
 		r = replace(r, "S", Start);
 		r = replace(r, "G", Goal);
 		cipher += (r + "<br>").c_str();
 	}
 	//cipher = addLineBreaks(cipher);
-	replace(cipher, " ", "&nbsp;");
-	replace(plain, " ", "&nbsp;");
+	//replace(cipher, " ", "&nbsp;");
+	//replace(plain, " ", "&nbsp;");
 	plain += string(stringizer() + "<hr>" + lab.path).c_str();
 
 	{
