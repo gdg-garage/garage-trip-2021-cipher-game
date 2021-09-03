@@ -2,6 +2,8 @@
 
 #include <cage-core/math.h>
 
+#include <vector>
+
 namespace
 {
 	constexpr const char *dnaPerChar[] = {
@@ -67,14 +69,13 @@ namespace
 
 	std::string dnaEncode(const std::string &s)
 	{
-		std::string o;
+		std::vector<string> parts;
 		for (const char i : s)
 		{
 			if (i >= 'A' && i <= 'Z')
 			{
 				for (const char c : string(dnaPerChar[i - 'A']))
 				{
-					o += "<div style=\"display:inline-block\">";
 					char a = c;
 					char b = complementary(c);
 					if (randomChance() < 0.1)
@@ -86,14 +87,22 @@ namespace
 						a = tolower(a);
 						b = tolower(b);
 					}
-					o += std::string() + a + "<br>" + b;
-					o += "</div>";
+					parts.push_back(stringizer() + string(a) + "&nbsp;" + string(b) + "<br>");
 				}
 			}
 			else
-				o += i;
+				parts.push_back(string(i) + "<br>");
 		}
-		return o;
+		std::string o = "<style>div { vertical-align: top; margin-right: 7em; }</style><div>";
+		uint32 index = 0;
+		while (!parts.empty())
+		{
+			if (index++ % 42 == 0)
+				o += "</div><div style=\"display: inline-block\">";
+			o += parts.front().c_str();
+			parts.erase(parts.begin());
+		}
+		return o + "</div>";
 	}
 }
 

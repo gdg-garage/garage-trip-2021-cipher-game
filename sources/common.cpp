@@ -48,26 +48,24 @@ std::string generateHeader(uint32 index, const string &name)
 <head>
 <title>DOCID - TITLE</title>
 <style>
-*
-{
+* {
 	font-size: 14pt;
 	font-family: monospace;
 }
-#docid
-{
-	float: right;
-}
+#docid { float: right; }
+body { margin: 2em; }
 </style>
 </head>
 <body>
 <div id="docid">
 TITLE (DOCID)
 </div>
+<div style="clear: both" />
+<hr>
 )foo";
 
 	replace(s, "TITLE", name.c_str());
 	replace(s, "DOCID", string(stringizer() + index).c_str());
-	s += "<div style=\"clear: both\" />\n";
 	return s;
 }
 
