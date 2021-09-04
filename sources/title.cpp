@@ -80,7 +80,7 @@ V celé hře se používá výhradně anglická abeceda (26 znaků).
 <br>
 Všechny texty jsou psány spisovnou češtinou (s odstraněnou diakritikou).
 <br>
-Tabulka relativní frequence písmen:
+Tabulka relativní frekvence písmen:
 <br>
 )foo" + letterFreq + R"foo(
 
