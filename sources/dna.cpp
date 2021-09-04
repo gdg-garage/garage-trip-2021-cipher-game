@@ -78,14 +78,14 @@ namespace
 				{
 					char a = c;
 					char b = complementary(c);
-					if (randomChance() < 0.1)
+					if (randomChance() < 0.15)
 					{
 						if (randomChance() < 0.5)
 							a = different(a);
 						else
 							b = different(b);
-						a = tolower(a);
-						b = tolower(b);
+						//a = tolower(a);
+						//b = tolower(b);
 					}
 					parts.push_back(stringizer() + string(a) + "&nbsp;" + string(b) + "<br>");
 				}
@@ -93,12 +93,12 @@ namespace
 			else
 				parts.push_back(string(i) + "<br>");
 		}
-		std::string o = "<style>div { vertical-align: top; margin-right: 7em; }</style><div>";
+		std::string o = "<style>.row { display: inline-block; vertical-align: top; margin-right: 7em; }</style><div>";
 		uint32 index = 0;
 		while (!parts.empty())
 		{
 			if (index++ % 42 == 0)
-				o += "</div><div style=\"display: inline-block\">";
+				o += "</div><div class=\"row\">";
 			o += parts.front().c_str();
 			parts.erase(parts.begin());
 		}
