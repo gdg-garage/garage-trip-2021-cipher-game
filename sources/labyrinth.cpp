@@ -29,7 +29,7 @@ namespace
 		uint32 width = 0, height = 0;
 		uint32 path = m;
 
-		Cell &cell(ivec2 p)
+		Cell &cell(Vec2i p)
 		{
 			CAGE_ASSERT(p[0] >= 0 && (uint32)p[0] < width && p[1] >= 0 && (uint32)p[1] < height);
 			return cells[p[1] * width + p[0]];
@@ -47,7 +47,7 @@ namespace
 			corridors();
 		}
 
-		Cell &cell(ivec2 p)
+		Cell &cell(Vec2i p)
 		{
 			CAGE_ASSERT(p[0] >= 0 && (uint32)p[0] < width && p[1] >= 0 && (uint32)p[1] < height);
 			return cells[p[1] * width + p[0]];
@@ -63,41 +63,41 @@ namespace
 			return cnt;
 		}
 
-		void rectReplace(ivec2 a, ivec2 b, Cell what, Cell with)
+		void rectReplace(Vec2i a, Vec2i b, Cell what, Cell with)
 		{
 			for (sint32 y = a[1]; y < b[1]; y++)
 			{
 				for (sint32 x = a[0]; x < b[0]; x++)
 				{
-					Cell &c = cell(ivec2(x, y));
+					Cell &c = cell(Vec2i(x, y));
 					if (c == what)
 						c = with;
 				}
 			}
 		}
 
-		ivec2 findAny(Cell c)
+		Vec2i findAny(Cell c)
 		{
 			for (uint32 i = 0; i < cells.size(); i++)
 				if (cells[i] == c)
-					return ivec2(i % width, i / width);
-			return ivec2(-1);
+					return Vec2i(i % width, i / width);
+			return Vec2i(-1);
 		}
 
-		void seedReplace(ivec2 seed, Cell what, Cell with)
+		void seedReplace(Vec2i seed, Cell what, Cell with)
 		{
 			CAGE_ASSERT(what != with);
-			std::vector<ivec2> q;
+			std::vector<Vec2i> q;
 			q.push_back(seed);
 			while (!q.empty())
 			{
-				const ivec2 p = q.back();
+				const Vec2i p = q.back();
 				q.pop_back();
 				Cell &c = cell(p);
 				if (c != what)
 					continue;
 				c = with;
-				for (ivec2 it : { p + ivec2(-1, 0), p + ivec2(1, 0), p + ivec2(0, -1), p + ivec2(0, 1) })
+				for (Vec2i it : { p + Vec2i(-1, 0), p + Vec2i(1, 0), p + Vec2i(0, -1), p + Vec2i(0, 1) })
 					if (cell(it) == what)
 						q.push_back(it);
 			}
@@ -107,7 +107,7 @@ namespace
 		{
 			seedReplace(findAny(Cell::Empty), Cell::Empty, Cell::Tmp);
 			bool res = countCells(Cell::Empty) == 0;
-			rectReplace(ivec2(), ivec2(width, height), Cell::Tmp, Cell::Empty); // restore back
+			rectReplace(Vec2i(), Vec2i(width, height), Cell::Tmp, Cell::Empty); 
 			return res;
 		}
 
@@ -124,8 +124,8 @@ namespace
 				while (countCells(Cell::Empty) < width * height * 3 / 5)
 				{
 					constexpr uint32 S = 6;
-					ivec2 a = ivec2(randomRange(1u, width - S), randomRange(1u, height - S));
-					ivec2 b = a + randomRange2i(3, S + 1);
+					Vec2i a = Vec2i(randomRange(1u, width - S), randomRange(1u, height - S));
+					Vec2i b = a + randomRange2i(3, S + 1);
 					rectReplace(a, b, Cell::None, Cell::Empty);
 				}
 
@@ -134,14 +134,14 @@ namespace
 				{
 					for (uint32 x = 1; x < width; x++)
 					{
-						const ivec2 p = ivec2(x, y);
+						const Vec2i p = Vec2i(x, y);
 						Cell &c = cell(p);
 						if (c != Cell::Empty)
 							continue;
 						uint32 neighs = 0;
 						for (sint32 j = -1; j < 2; j++)
 							for (sint32 i = -1; i < 2; i++)
-								neighs += cell(p + ivec2(i, j)) == Cell::None;
+								neighs += cell(p + Vec2i(i, j)) == Cell::None;
 						if (neighs > 0)
 							c = Cell::Wall;
 					}
@@ -157,14 +157,14 @@ namespace
 		{
 			for (uint32 round = 0; round < 1000000; round++)
 			{
-				const ivec2 p = ivec2(randomRange(2u, width - 2), randomRange(2u, height - 2));
+				const Vec2i p = Vec2i(randomRange(2u, width - 2), randomRange(2u, height - 2));
 				Cell &c = cell(p);
 				if (c != Cell::Empty)
 					continue;
 				bool neighs[8];
 				{
 					bool *n = neighs;
-					for (ivec2 it : { ivec2(-1, 0), ivec2(-1, -1), ivec2(0, -1), ivec2(1, -1), ivec2(1, 0), ivec2(1, 1), ivec2(0, 1), ivec2(-1, 1) })
+					for (Vec2i it : { Vec2i(-1, 0), Vec2i(-1, -1), Vec2i(0, -1), Vec2i(1, -1), Vec2i(1, 0), Vec2i(1, 1), Vec2i(0, 1), Vec2i(-1, 1) })
 						*n++ = cell(p + it) == Cell::Wall;
 				}
 				if (!neighs[0] && !neighs[2] && !neighs[4] && !neighs[6])
@@ -202,18 +202,18 @@ namespace
 		Labyrinth &lab;
 
 		std::vector<uint32> dists;
-		std::vector<ivec2> prevs;
+		std::vector<Vec2i> prevs;
 
 		Paths(Labyrinth &lab) : lab(lab)
 		{}
 
-		Cell &cell(ivec2 p)
+		Cell &cell(Vec2i p)
 		{
 			CAGE_ASSERT(p[0] >= 0 && (uint32)p[0] < lab.width && p[1] >= 0 && (uint32)p[1] < lab.height);
 			return lab.cells[p[1] * lab.width + p[0]];
 		}
 
-		bool walkable(ivec2 p)
+		bool walkable(Vec2i p)
 		{
 			switch (cell(p))
 			{
@@ -227,36 +227,36 @@ namespace
 			}
 		}
 
-		uint32 &dist(ivec2 p)
+		uint32 &dist(Vec2i p)
 		{
 			return dists[p[1] * lab.width + p[0]];
 		}
 
-		ivec2 &prev(ivec2 p)
+		Vec2i &prev(Vec2i p)
 		{
 			return prevs[p[1] * lab.width + p[0]];
 		}
 
-		void distances(ivec2 start)
+		void distances(Vec2i start)
 		{
 			CAGE_ASSERT(walkable(start));
 
 			dists.clear();
 			prevs.clear();
 			dists.resize(lab.cells.size(), m);
-			prevs.resize(lab.cells.size(), ivec2(-1));
+			prevs.resize(lab.cells.size(), Vec2i(-1));
 
-			std::vector<ivec2> q;
+			std::vector<Vec2i> q;
 			q.push_back(start);
 			dist(start) = 0;
 			while (!q.empty())
 			{
-				const ivec2 p = q.front();
+				const Vec2i p = q.front();
 				q.erase(q.begin());
 				const uint32 pd = dist(p);
 				CAGE_ASSERT(pd != m);
 				CAGE_ASSERT(walkable(p));
-				for (ivec2 it : { p + ivec2(-1, 0), p + ivec2(1, 0), p + ivec2(0, -1), p + ivec2(0, 1) })
+				for (Vec2i it : { p + Vec2i(-1, 0), p + Vec2i(1, 0), p + Vec2i(0, -1), p + Vec2i(0, 1) })
 				{
 					if (!walkable(it))
 						continue;
@@ -269,20 +269,20 @@ namespace
 			}
 		}
 
-		ivec2 pickRandom()
+		Vec2i pickRandom()
 		{
 			while (true)
 			{
-				const ivec2 p = ivec2(randomRange(1u, lab.width - 1), randomRange(1u, lab.height - 1));
+				const Vec2i p = Vec2i(randomRange(1u, lab.width - 1), randomRange(1u, lab.height - 1));
 				if (walkable(p))
 					return p;
 			}
 		}
 
-		ivec2 pickFurthest()
+		Vec2i pickFurthest()
 		{
 			uint32 d = 0;
-			ivec2 p = ivec2(-1);
+			Vec2i p = Vec2i(-1);
 			for (uint32 i = 0; i < dists.size(); i++)
 			{
 				uint32 k = dists[i];
@@ -291,13 +291,13 @@ namespace
 				if (k > d)
 				{
 					d = k;
-					p = ivec2(i % lab.width, i / lab.width);
+					p = Vec2i(i % lab.width, i / lab.width);
 				}
 			}
 			return p;
 		}
 
-		void markPath(ivec2 start, ivec2 goal)
+		void markPath(Vec2i start, Vec2i goal)
 		{
 			uint32 cnt = 1;
 			start = prev(start);
@@ -313,9 +313,9 @@ namespace
 		void paths()
 		{
 			distances(pickRandom());
-			ivec2 start = pickFurthest();
+			Vec2i start = pickFurthest();
 			distances(start);
-			ivec2 goal = pickFurthest();
+			Vec2i goal = pickFurthest();
 			std::swap(start, goal);
 			cell(start) = Cell::Start;
 			cell(goal) = Cell::Goal;
@@ -328,13 +328,13 @@ namespace
 		return std::string() + "<span style=\"margin:-2.5pt; font-size:70%\">" + icon + "</span>";
 	}
 
-	const std::string Start = iconSize(u8"\U0001F415"); // dog
-	const std::string Goal = iconSize(u8"\U0001F9B4"); // bone
-	const std::string Path = u8"\U0001F43E"; // paw prints
-	const std::string Empty = u8"\u00B7"; // middle dot
-	const std::string Space = u8"&nbsp;"; // indivisible space
+	const std::string Start = iconSize(u8"\U0001F415"); 
+	const std::string Goal = iconSize(u8"\U0001F9B4"); 
+	const std::string Path = u8"\U0001F43E"; 
+	const std::string Empty = u8"\u00B7"; 
+	const std::string Space = u8"&nbsp;"; 
 
-	string connectedWall(uint32 neighbors)
+	String connectedWall(uint32 neighbors)
 	{
 		switch (neighbors)
 		{
@@ -359,23 +359,23 @@ namespace
 		}
 	}
 
-	string convertToAscii(Labyrinth &lab, uint32 y)
+	String convertToAscii(Labyrinth &lab, uint32 y)
 	{
-		string res;
+		String res;
 		for (uint32 x = 1; x < lab.width - 1; x++)
 		{
-			switch (lab.cell(ivec2(x, y)))
+			switch (lab.cell(Vec2i(x, y)))
 			{
 			case Cell::Wall:
 			{
 				uint32 neighbors = 0;
-				if (lab.cell(ivec2(x - 1, y)) == Cell::Wall)
+				if (lab.cell(Vec2i(x - 1, y)) == Cell::Wall)
 					neighbors += 1; // left
-				if (lab.cell(ivec2(x, y - 1)) == Cell::Wall)
+				if (lab.cell(Vec2i(x, y - 1)) == Cell::Wall)
 					neighbors += 2; // top
-				if (lab.cell(ivec2(x + 1, y)) == Cell::Wall)
+				if (lab.cell(Vec2i(x + 1, y)) == Cell::Wall)
 					neighbors += 4; // right
-				if (lab.cell(ivec2(x, y + 1)) == Cell::Wall)
+				if (lab.cell(Vec2i(x, y + 1)) == Cell::Wall)
 					neighbors += 8; // bottom
 				res += connectedWall(neighbors);
 			} break;
@@ -432,16 +432,16 @@ void cipherLabyrinth()
 	std::string plain, cipher;
 	for (uint32 y = 1; y < lab.height - 1; y++)
 	{
-		const string s = convertToAscii(lab, y);
+		const String s = convertToAscii(lab, y);
 		plain += (replace(s, "?", "&nbsp;") + "<br>").c_str();
-		string r = trim(s, true, true, "?");
-		r = replace(r, "?", string(Space.c_str()));
+		String r = trim(s, true, true, "?");
+		r = replace(r, "?", String(Space.c_str()));
 		r = replace(r, "+", Empty);
 		r = replace(r, "S", Start);
 		r = replace(r, "G", Goal);
 		cipher += (r + "<br>").c_str();
 	}
-	plain += string(stringizer() + "<hr>" + lab.path).c_str();
+	plain += String(Stringizer() + "<hr>" + lab.path).c_str();
 
 	{
 		const std::string o = generateHeader(1, "Ťapky") + cipher + generateFooter();

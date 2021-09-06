@@ -69,12 +69,12 @@ namespace
 
 	std::string dnaEncode(const std::string &s)
 	{
-		std::vector<string> parts;
+		std::vector<String> parts;
 		for (const char i : s)
 		{
 			if (i >= 'A' && i <= 'Z')
 			{
-				for (const char c : string(dnaPerChar[i - 'A']))
+				for (const char c : String(dnaPerChar[i - 'A']))
 				{
 					char a = c;
 					char b = complementary(c);
@@ -84,14 +84,16 @@ namespace
 							a = different(a);
 						else
 							b = different(b);
-						//a = tolower(a);
-						//b = tolower(b);
+						parts.push_back(Stringizer() + String(a) + "&nbsp;" + String(b) + "<br>");
 					}
-					parts.push_back(stringizer() + string(a) + "&nbsp;" + string(b) + "<br>");
+					else if (a == 'A' || a == 'T')
+						parts.push_back(Stringizer() + String(a) + "=" + String(b) + "<br>");
+					else
+						parts.push_back(Stringizer() + String(a) + u8"\u2261" + String(b) + "<br>");
 				}
 			}
 			else
-				parts.push_back(string(i) + "<br>");
+				parts.push_back(String(i) + "<br>");
 		}
 		std::string o = "<style>.row { display: inline-block; vertical-align: top; margin-right: 7em; }</style><div>";
 		uint32 index = 0;

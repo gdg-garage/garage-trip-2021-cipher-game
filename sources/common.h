@@ -4,14 +4,14 @@
 
 using namespace cage;
 
-extern const string inputPath;
-extern const string outputPath;
-extern const string solutionPath;
+extern const String inputPath;
+extern const String outputPath;
+extern const String solutionPath;
 
-std::string generateHeader(uint32 index, const string &name);
+std::string generateHeader(uint32 index, const String &name);
 std::string generateFooter();
-std::string readInput(const string &name);
-void writeOutput(const string &name, const std::string &output);
+std::string readInput(const String &name);
+void writeOutput(const String &name, const std::string &output);
 
 void replace(std::string &str, const std::string &what, const std::string &with);
 std::string replaceCzech(const std::string &s);

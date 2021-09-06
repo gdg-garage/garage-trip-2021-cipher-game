@@ -74,7 +74,7 @@ namespace
 			{
 				const uint32 idx = index + r * 4 + c;
 				const uint8 t = data[idx];
-				const string s = t ? stringizer() + t : stringizer();
+				const String s = t ? Stringizer() + t : Stringizer();
 				if (responseFields.count(idx))
 					res += std::string() + "<td class=\"mark\">" + s.c_str() + "</td>";
 				else
@@ -270,7 +270,7 @@ td.mark { background-color: lightgray; }
 
 	{
 		Holder<File> f = writeFile(pathJoin(solutionPath, "sudocube.html"));
-		const std::string response = (stringizer() + sumFields(data, responseFields)).value.c_str();
+		const std::string response = (Stringizer() + sumFields(data, responseFields)).value.c_str();
 		const std::string o = std::string() + "<html><head><style>*{font-size:14pt; font-family:monospace;}</style></head><body>" + style + printCross(data, responseFields) + "<hr>" + response + "</body></html>";
 		f->write(o);
 		f->close();

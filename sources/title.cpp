@@ -9,10 +9,10 @@ namespace
 {
 	std::string frequenciesTable(const std::string &csv)
 	{
-		std::vector<string> freqs;
+		std::vector<String> freqs;
 		{
 			auto lr = newLineReader(csv);
-			string line;
+			String line;
 			while (lr->readLine(line))
 			{
 				split(line, ",");
@@ -24,8 +24,8 @@ namespace
 		for (uint32 i = 0; i < 13; i++)
 		{
 			res += "<tr>\n";
-			res += (stringizer() + "<td class=\"letter\">" + string('A' + i) + "<td class=\"frequency\">" + freqs[i]).value.c_str();
-			res += (stringizer() + "<td class=\"letter\">" + string('N' + i) + "<td class=\"frequency\">" + freqs[i + 13]).value.c_str();
+			res += (Stringizer() + "<td class=\"letter\">" + String('A' + i) + "<td class=\"frequency\">" + freqs[i]).value.c_str();
+			res += (Stringizer() + "<td class=\"letter\">" + String('N' + i) + "<td class=\"frequency\">" + freqs[i + 13]).value.c_str();
 			res += "</tr>\n";
 		}
 		return res + "</table>\n";
@@ -90,9 +90,11 @@ Prvočíslo je přirozené číslo větší než 1, které je dělitelné jen dv
 <hr>
 )foo" + dnaSvg + R"foo(
 <br>
-A se páruje s T dvěma vodíkovými vazbami.
+A se pojí s T dvěma vodíkovými vazbami.
 <br>
-C se páruje s G třemi vodíkovými vazbami.
+C se pojí s G třemi vodíkovými vazbami.
+<br>
+Sekvence AA kóduje písmeno e.
 <br>
 Sekvence AT kóduje písmeno a.
 <br>

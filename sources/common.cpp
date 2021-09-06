@@ -6,12 +6,12 @@
 
 namespace
 {
-	string findDataPath()
+	String findDataPath()
 	{
 		return pathToAbs(pathSearchTowardsRoot("inputs", PathTypeFlags::Directory));
 	}
 
-	string findOutputPath()
+	String findOutputPath()
 	{
 		try
 		{
@@ -24,7 +24,7 @@ namespace
 		}
 	}
 
-	string findSolutionPath()
+	String findSolutionPath()
 	{
 		try
 		{
@@ -38,11 +38,11 @@ namespace
 	}
 }
 
-const string inputPath = findDataPath();
-const string outputPath = findOutputPath();
-const string solutionPath = findSolutionPath();
+const String inputPath = findDataPath();
+const String outputPath = findOutputPath();
+const String solutionPath = findSolutionPath();
 
-std::string generateHeader(uint32 index, const string &name)
+std::string generateHeader(uint32 index, const String &name)
 {
 	std::string s = R"foo(<html>
 <head>
@@ -65,7 +65,7 @@ TITLE (DOCID)
 )foo";
 
 	replace(s, "TITLE", name.c_str());
-	replace(s, "DOCID", string(stringizer() + index).c_str());
+	replace(s, "DOCID", String(Stringizer() + index).c_str());
 	return s;
 }
 
@@ -77,15 +77,15 @@ std::string generateFooter()
 )foo";
 }
 
-std::string readInput(const string &name)
+std::string readInput(const String &name)
 {
 	auto b = readFile(pathJoin(inputPath, name))->readAll();
 	return std::string(b.data(), b.size());
 }
 
-void writeOutput(const string &name, const std::string &output)
+void writeOutput(const String &name, const std::string &output)
 {
-	auto f = writeFile(pathJoin(outputPath, stringizer() + name + ".html"));
+	auto f = writeFile(pathJoin(outputPath, Stringizer() + name + ".html"));
 	f->write(output);
 	f->close();
 }
