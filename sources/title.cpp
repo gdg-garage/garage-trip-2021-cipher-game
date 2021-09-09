@@ -80,7 +80,7 @@ V celé hře se používá výhradně anglická abeceda (26 znaků).
 <br>
 Všechny texty jsou psány spisovnou češtinou (s odstraněnou diakritikou).
 <br>
-Tabulka relativní frekvence písmen:
+Tabulka relativní frekvence písmen v obecném textu:
 <br>
 )foo" + letterFreq + R"foo(
 
@@ -90,15 +90,17 @@ Prvočíslo je přirozené číslo větší než 1, které je dělitelné jen dv
 <hr>
 )foo" + dnaSvg + R"foo(
 <br>
-A se pojí s T dvěma vodíkovými vazbami.
+V DNA se vyskytují čtyři báze, typicky značené písmeny A,&nbsp;T,&nbsp;C&nbsp;a&nbsp;G.
 <br>
-C se pojí s G třemi vodíkovými vazbami.
+A se pojí s T dvěma a C s G třemi vodíkovými vazbami.
 <br>
-Sekvence AA kóduje písmeno e.
+Jiné kombinace nejsou možné.
 <br>
-Sekvence AT kóduje písmeno a.
+Sekvence AA kóduje písmeno E.
 <br>
-Sekvence GAC kóduje písmeno z.
+Sekvence AT kóduje písmeno A.
+<br>
+Sekvence GAC kóduje písmeno Z.
 </body>
 </html>
 )foo";
