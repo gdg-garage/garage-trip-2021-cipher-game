@@ -7,31 +7,31 @@
 namespace
 {
 	constexpr const char *dnaPerChar[] = {
-		"AT", // A
-		"GCA",
-		"GTA",
-		"CC",
-		"AA",
-		"GCC",
-		"GCT",
-		"GTC",
-		"AG",
-		"GTG",
-		"GAT",
-		"TT",
-		"CG",
-		"TA",
-		"AC",
-		"GAG",
-		"GGT",
-		"CA",
-		"TC",
-		"TG",
-		"GAA",
-		"CT",
-		"GCG",
-		"GGA",
-		"GTT",
+		"AT",  // A
+		"GCA", // B
+		"GTA", // C
+		"CC",  // D
+		"AA",  // E
+		"GCC", // F
+		"GCT", // G
+		"GTC", // H
+		"AG",  // I
+		"GTG", // J
+		"GAT", // K
+		"TT",  // L
+		"CG",  // M
+		"TA",  // N
+		"AC",  // O
+		"GAG", // P
+		"GGT", // Q
+		"CA",  // R
+		"TC",  // S
+		"TG",  // T
+		"GAA", // U
+		"CT",  // V
+		"GCG", // W
+		"GGA", // X
+		"GTT", // Y
 		"GAC", // Z
 	};
 
@@ -111,6 +111,7 @@ namespace
 void cipherDna()
 {
 	rngReseed();
+	randomChance(); // rng offset
 	std::string i = readInput("dna.txt");
 	i = replaceLfToSpaces(i);
 	i = replaceCzech(i);
