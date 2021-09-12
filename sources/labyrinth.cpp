@@ -39,7 +39,7 @@ namespace
 	struct Generator
 	{
 		std::vector<Cell> cells;
-		uint32 width = 0, height = 0;
+		uint32 width = 45, height = 25;
 
 		void generate()
 		{
@@ -115,8 +115,6 @@ namespace
 		{
 			while (true)
 			{
-				width = randomRange(50, 60);
-				height = randomRange(35, 40);
 				cells.clear();
 				cells.resize(width * height, Cell::None);
 
@@ -419,13 +417,14 @@ namespace
 void cipherLabyrinth()
 {
 	rngReseed();
+	randomChance3(); // rng offset
 	Labyrinth lab;
 	while (true)
 	{
 		lab = generate();
 		Paths paths(lab);
 		paths.paths();
-		if (isPrime(lab.path))
+		if (lab.path == 79) // if (isPrime(lab.path))
 			break;
 	}
 

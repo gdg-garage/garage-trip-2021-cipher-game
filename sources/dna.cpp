@@ -1,6 +1,7 @@
 #include "common.h"
 
 #include <cage-core/math.h>
+#include <cage-core/files.h>
 
 #include <vector>
 
@@ -112,10 +113,17 @@ void cipherDna()
 {
 	rngReseed();
 	randomChance(); // rng offset
-	std::string i = readInput("dna.txt");
+	std::string i = "Třináct krát čtyřicet dva plus jedenáct.";
+	const std::string r = "557";
 	i = replaceLfToSpaces(i);
 	i = replaceCzech(i);
 	i = toUpper(i);
+	{
+		Holder<File> f = writeFile(pathJoin(solutionPath, "dna.html"));
+		const std::string o = std::string() + "<html><head><style>*{font-size:14pt; font-family:monospace;}</style></head><body>" + i + "<hr>" + r + "</body></html>";
+		f->write(o);
+		f->close();
+	}
 	std::string s = dnaEncode(i);
 	const std::string o = generateHeader(3, "DNA") + s + generateFooter();
 	writeOutput("4", o);

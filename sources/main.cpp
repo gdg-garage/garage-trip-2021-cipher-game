@@ -6,6 +6,7 @@ void makeTitle();
 void cipherLabyrinth();
 void cipherSudocube();
 void cipherDna();
+void cipherSecret();
 
 int main(int argc, const char *args[])
 {
@@ -19,6 +20,7 @@ int main(int argc, const char *args[])
 		cipherLabyrinth();
 		cipherSudocube();
 		cipherDna();
+		cipherSecret();
 
 		return 0;
 	}
