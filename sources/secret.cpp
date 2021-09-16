@@ -41,6 +41,13 @@ void cipherSecret()
 		f->close();
 	}
 
-	const std::string o = generateHeader(4, "Tajemství") + generateFooter();
+	const std::string s = R"foo(
+<div style="position: relative; width: 100%; height: 100%; ">
+<div style="position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); ">
+++
+</div>
+</div>
+)foo";
+	const std::string o = generateHeader(4, "Tajemství") + s + generateFooter();
 	writeOutput("5", o);
 }
