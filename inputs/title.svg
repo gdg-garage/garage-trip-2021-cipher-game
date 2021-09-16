@@ -1,12 +1,32 @@
 <svg viewbox="0 0 200 320" xmlns="http://www.w3.org/2000/svg">
+<defs>
+<g id="inner" stroke-width="5" fill="transparent">
+<path d="M -35 0 q 0 -35, 35 -35" stroke="deeppink" />
+<path d="M -25 0 q 0 -25, 25 -25" stroke="yellow" />
+<path d="M -15 0 q 0 -15, 15 -15" stroke="lightgreen" />
+<path d="M -5 0 q 0 -5, 5 -5" stroke="cyan" />
+</g>
+<g id="outer" stroke-width="4" fill="transparent">
+<path d="M 40 5 c 40 0, 40 110, -40 110" stroke="deeppink" />
+<path d="M 40 15 c 30 0, 30 90, -40 90" stroke="yellow" />
+<path d="M 40 25 c 20 0, 20 70, -40 70" stroke="lightgreen" />
+<path d="M 40 35 c 10 0, 10 50, -40 50" stroke="cyan" />
+</g>
+<g id="vertical" stroke-width="6" fill="transparent">
+<path d="M 85 0 l 0 320" stroke="deeppink" />
+<path d="M 95 0 l 0 320" stroke="yellow" />
+<path d="M 105 0 l 0 320" stroke="lightgreen" />
+<path d="M 115 0 l 0 320" stroke="cyan" />
+</g>
+</defs>
 <g transform="translate(0 320) scale(1 -1)">
-<path d="M -35 0 q 0 -35, 35 -35 M -25 0 q 0 -25, 25 -25 M -15 0 q 0 -15, 15 -15 M -5 0 q 0 -5, 5 -5" stroke="gray" fill="transparent" transform="translate(80 120)" />
-<path d="M -35 0 q 0 -35, 35 -35 M -25 0 q 0 -25, 25 -25 M -15 0 q 0 -15, 15 -15 M -5 0 q 0 -5, 5 -5" stroke="gray" fill="transparent" transform="translate(120 120) rotate(90)" />
-<path d="M -35 0 q 0 -35, 35 -35 M -25 0 q 0 -25, 25 -25 M -15 0 q 0 -15, 15 -15 M -5 0 q 0 -5, 5 -5" stroke="gray" fill="transparent" transform="translate(120 160) rotate(180)" />
-<path d="M -35 0 q 0 -35, 35 -35 M -25 0 q 0 -25, 25 -25 M -15 0 q 0 -15, 15 -15 M -5 0 q 0 -5, 5 -5" stroke="gray" fill="transparent" transform="translate(80 160) rotate(270)" />
-<path d="M 40 5 c 40 0, 40 110, -40 110 M 40 15 c 30 0, 30 90, -40 90 M 40 25 c 20 0, 20 70, -40 70 M 40 35 c 10 0, 10 50, -40 50" stroke="gray" fill="transparent" transform="translate(120 120)" />
-<path d="M 40 5 c 40 0, 40 110, -40 110 M 40 15 c 30 0, 30 90, -40 90 M 40 25 c 20 0, 20 70, -40 70 M 40 35 c 10 0, 10 50, -40 50" stroke="gray" fill="transparent" transform="translate(80 120) scale(-1 1)" />
-<path d="M 85 0 l 0 320 M 95 0 l 0 320 M 105 0 l 0 320 M 115 0 l 0 320" stroke="gray" fill="transparent" />
+<use href="#inner" transform="translate(80 120)" />
+<use href="#inner" transform="translate(120 120) rotate(90)" />
+<use href="#inner" transform="translate(120 160) rotate(180)" />
+<use href="#inner" transform="translate(80 160) rotate(270)" />
+<use href="#outer" transform="translate(120 120)" />
+<use href="#outer" transform="translate(80 120) scale(-1 1)" />
+<use href="#vertical" />
 <path d="M 80 80 l 40 0, 0 40, 40 0, 0 40, -40 0, 0 80, -40 0, 0 -80, -40 0, 0 -40, 40 0, 0 -40, 1 0" stroke="black" stroke-width="3" fill="lightgrey" />
 </g>
 <text x="85" y="105" textLength="30">GA</text>
